@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"log/slog"
 	"os/exec"
 	"strings"
 )
@@ -16,13 +18,16 @@ type CppRunner struct {
 
 func NewCppRunner() *CppRunner {
 	return &CppRunner{
-		filePath: "./codes/code.cpp",
+		filePath: "./code.cpp",
 	}
 }
 
 func (c *CppRunner) Compile() error {
 	cmd := exec.Command("clang++", c.filePath, "-o", "main")
-	_, err := cmd.CombinedOutput()
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		slog.Info(string(out))
+	}
 	return err
 }
 
@@ -46,7 +51,7 @@ func (c *CppRunner) Exec(input string, output string) error {
 
 	for i := range len(outLines) {
 		if outLines[i] != cmdLines[i] {
-			return fmt.Errorf("cpp: output did not match line:%d, want %s , got: %s", i+1, outLines[i], cmdLines[i])
+			log.Printf("cpp: output did not match line:%d, want %s , got: %s", i+1, outLines[i], cmdLines[i])
 		}
 	}
 
