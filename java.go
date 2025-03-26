@@ -45,10 +45,10 @@ func (j *JavaRunner) Compile() error {
 }
 
 func (j *JavaRunner) Exec(input string, output string) error {
+	j.Change()
 	if err := j.Compile(); err != nil {
 		return fmt.Errorf("compilation error: %w", err)
 	}
-	j.Change()
 	defer j.Unchange()
 
 	dir := filepath.Dir(j.filePath)

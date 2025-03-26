@@ -75,9 +75,13 @@ func main() {
 	}
 	CreateFile("inp", file.GetInput())
 	CreateFile("out",file.GetOutput())
+
 	
 	rn:=NewCppRunner()
 	jrn:=NewJavaRunner()
+	prn:=NewPythonRunner()
+
 	file.Exec(rn)
 	file.Exec(jrn)
+	file.Exec(prn)
 }
