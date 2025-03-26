@@ -40,6 +40,7 @@ func (c *CppRunner) Exec(input string, output string) error {
 	cmd.Stdin = strings.NewReader(input)
 	cmdOutput, err := cmd.CombinedOutput()
 	if err != nil {
+		slog.Error(string(cmdOutput))
 		return err
 	}
 

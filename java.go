@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log/slog"
 	"log"
+	"log/slog"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -40,8 +40,12 @@ func (j *JavaRunner) Unchange() {
 
 func (j *JavaRunner) Compile() error {
 	cmd := exec.Command("javac", j.filePath)
-	_, err := cmd.CombinedOutput()
-	return err
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		slog.Error(string(out))
+		return err
+	}
+	return nil
 }
 
 func (j *JavaRunner) Exec(input string, output string) error {
@@ -56,6 +60,7 @@ func (j *JavaRunner) Exec(input string, output string) error {
 	cmd.Stdin = strings.NewReader(input)
 	cmdOutput, err := cmd.CombinedOutput()
 	if err != nil {
+		slog.Error(string(cmdOutput))
 		return fmt.Errorf("execution error: %w", err)
 	}
 
