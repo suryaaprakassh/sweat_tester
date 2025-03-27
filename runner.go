@@ -45,7 +45,7 @@ func (c *CppRunner) Exec(input string, output string) error {
 	}
 
 	outLines := strings.Split(output, "\n")
-	cmdLines := strings.Split(output, "\n")
+	cmdLines := strings.Split(string(cmdOutput), "\n")
 	if len(outLines) != len(cmdLines) {
 		return fmt.Errorf("cpp: want %d output, got %d output", len(outLines), len(cmdLines))
 	}
