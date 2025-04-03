@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log/slog"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -68,8 +70,18 @@ func (r ResFile) GetOutput() string {
 	return b.String()
 }
 
+func cleanAll() {
+	cmd := exec.Command("rm","-rf","*class","*out","inp","main")
+	_, err := cmd.CombinedOutput()
+	if err != nil {
+		slog.Error("Could no clean up!")
+	}
+}
+
 func main() {
 	var file ResFile
+	var cleanUp = flag.Bool("c", false, "cleanup")
+	flag.Parse()
 	if err := file.Read("results.json"); err != nil {
 		slog.Error(err.Error())
 	}
@@ -84,4 +96,8 @@ func main() {
 	file.Exec(rn)
 	file.Exec(jrn)
 	file.Exec(prn)
+	if *cleanUp {
+		slog.Info("Cleaning Up!")
+		cleanAll();
+	}
 }
